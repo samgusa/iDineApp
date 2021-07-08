@@ -8,6 +8,9 @@
 
 import SwiftUI
 
+//with observableObject given order class the ability to announce that it has changed, and we can now make SwiftUI watch for those announcements and reload UI.
+//just created an instance of order and placed it into environment. As result, any view that comes from ContentView can read that order back out and manipulate it somehow.
+
 class Order: ObservableObject {
     @Published var items = [MenuItem]()
 
