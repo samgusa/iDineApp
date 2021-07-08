@@ -10,11 +10,12 @@ import SwiftUI
 @main
 struct iDineAppApp: App {
     let persistenceController = PersistenceController.shared
-
+    //will automatically gain access to environment object, and when any view changes it, all other places automatically update.
+    @StateObject var order = Order()
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environmentObject(order)
         }
     }
 }
