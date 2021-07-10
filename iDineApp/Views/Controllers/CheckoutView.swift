@@ -13,18 +13,47 @@ struct CheckoutView: View {
     @State private var paymentType = "Cash"
     
     let paymentTypes = ["Cash", "Credit Card", "iDine Points"]
+    let tipAmounts = [10, 15, 20, 25, 0]
+    
+    
+    @State private var tipAmount = 15
     
     @EnvironmentObject var order: Order
     
+    @State private var addLoyaltyDetails = false
+    @State private var loyaltyNumber = ""
+    
     var body: some View {
-        VStack {
+        Form {
             Section {
+                //picker doesn't just read value of paymentType, it also writes the value, which is called two-way binding, because any changes to the value of paymentType will update the picker.
+                //this is where $ comes in, Swift property wrappers use that to provide two-way bindings to their data.
                 Picker("How do you want to pay?", selection: $paymentType) {
                     ForEach(paymentTypes, id: \.self) {
                         Text($0)
                     }
                 }
             }
+            Toggle("Add iDine loyalty card", isOn: $addLoyaltyDetails.animation())
+            if addLoyaltyDetails {
+                TextField("Enter your iDine ID", text: $loyaltyNumber)
+            }
+            
+            Section(header: Text("Add a tip?")) {
+                Picker("Percentage:", selection: $tipAmount) {
+                    ForEach(tipAmounts, id: \.self) {
+                        Text("\($0)%")
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+            }
+            
+            Section(header: Text("TOTAL: $100")) {
+                Button("Confirm Order") {
+                    //place the order
+                }
+            }
+            
         }
         .navigationTitle("Payment")
         .navigationBarTitleDisplayMode(.inline)
