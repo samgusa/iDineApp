@@ -32,6 +32,9 @@ struct CheckoutView: View {
         return formatter.string(from: NSNumber(value: total + tipValue)) ?? "$0"
     }
     
+    //this can show where the reactive nature of SqiftUI starts to become clear. We don't say, "show the alert" or "hide the alert" like in UIKit, but instead say, "here are conditions where the alert should be shown", let SwiftUI siguren out when those conditions are met.
+    @State private var showingPaymentAlert = false
+    
     var body: some View {
         Form {
             Section {
@@ -59,13 +62,16 @@ struct CheckoutView: View {
             
             Section(header: Text("TOTAL: \(totalPrice)")) {
                 Button("Confirm Order") {
-                    //place the order
+                    showingPaymentAlert.toggle()
                 }
             }
             
         }
         .navigationTitle("Payment")
         .navigationBarTitleDisplayMode(.inline)
+        .alert(isPresented: $showingPaymentAlert) {
+            Alert(title: Text("Order confirmed"), message: Text("Your total was \(totalPrice) - thank you!"), dismissButton: .default(Text("OK")))
+        }
     }
 }
 
